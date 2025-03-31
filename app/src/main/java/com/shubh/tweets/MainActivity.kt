@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             TweetsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "second stage",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
