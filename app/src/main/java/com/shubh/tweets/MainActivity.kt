@@ -5,12 +5,18 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,6 +26,7 @@ import androidx.navigation.navArgument
 import com.shubh.tweets.api.TweetsyApi
 import com.shubh.tweets.screens.CategoryScreens
 import com.shubh.tweets.screens.DetailScreen
+import com.shubh.tweets.screens.showLoader
 import com.shubh.tweets.ui.theme.TweetsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -32,13 +39,33 @@ class MainActivity : ComponentActivity() {
         private const val TAG = "MainActivity"
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
             TweetsTheme {
-                App()
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = {
+                                Text(text = "Tweets")
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = Color.Black,
+                                titleContentColor = Color.White
+                            )
+                        )
+                    }
+                ) { // it will give the exact space from top bar
+                    Box(modifier = Modifier.padding(it)) {
+                       App()
+
+                    }
+
+                }
+
 
             }
         }
