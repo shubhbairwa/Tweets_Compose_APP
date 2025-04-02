@@ -12,7 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.shubh.tweets.api.TweetsyApi
+import com.shubh.tweets.screens.CategoryScreens
+import com.shubh.tweets.screens.DetailScreen
 import com.shubh.tweets.ui.theme.TweetsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -31,31 +38,33 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TweetsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "second stage",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                App()
+
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun App() {
+    //setup navigation
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "category") {
+        composable("category") {
+            CategoryScreens {
+                navController.navigate("detail/${it}") //used to navigate
+            }
+        }
+        composable(route = "detail/{category}",
+            arguments = listOf(  //if we need to pass data between compose thatn use this
+                navArgument("category") {
+                    type = NavType.StringType
+                }
+            )) {
+            DetailScreen()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TweetsTheme {
-
-        Greeting("Android")
+        }
 
     }
 }
+
